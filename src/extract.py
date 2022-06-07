@@ -3,9 +3,9 @@ import io
 import urllib.parse
 import base64
 import sys
+import random
 
 import hitherdither
-from inky import auto
 from PIL import Image
 
 
@@ -26,7 +26,7 @@ def _get_image(page):
     fh.write(base64.b64decode(to_decode))
     return fh
 
-def set_page(page):
+def _set_page(page):
 
     if (page < 100) or( page > 999):
         page = 100
@@ -39,8 +39,20 @@ def set_page(page):
     image = Image.open(_get_image(page)).convert("RGB")
     image_resized = image.resize(inky.resolution)
 
-    image_dithered = hitherdither.ordered.bayer.bayer_dithering(image_resized, palette, thresholds, order=8)
+    return hitherdither.ordered.bayer.bayer_dithering(image_resized, palette, thresholds, order=8)
 
-    inky.set_image(image_resized)
-    inky.show()
 
+def _get_possible_pages():
+    toReturn = [*range(104, 200, 1)]
+    toReturn.append(401)
+
+    return toReturn
+
+def set_texttv():
+    list = _get_possible_pages()
+    
+    while True:
+        try:
+            return _set_page(random.choice(list))
+        except:
+            print("Error getting page retry")

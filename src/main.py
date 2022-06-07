@@ -1,12 +1,10 @@
-from extract import set_page
+from extract import set_texttv
 import time
+from try_inky import set_screen
 
 while True:
-    set_page(401)
-    time.sleep(4*60)
-    for i in range(105,200):
-        try:
-            set_page(i)
-            time.sleep(4*60)
-        except:
-            print("Error " + str(i))
+    try:
+        set_screen(set_texttv)
+        time.sleep(60*2)
+    except:
+        print("Failed")

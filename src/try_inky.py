@@ -8,7 +8,8 @@ def _dither_image(img):
     inky = get_inky()
     thresholds = [64, 64, 64]  # Threshold for snapping colours, I guess?
     palette = hitherdither.palette.Palette(inky._palette_blend(0.8, dtype='uint24'))
-    return hitherdither.ordered.bayer.bayer_dithering(image_resized, palette, thresholds, order=8)
+    new = hitherdither.ordered.bayer.bayer_dithering(img, palette, thresholds, order=8)
+    return new.convert("P")
 
 
 def set_screen(fun):

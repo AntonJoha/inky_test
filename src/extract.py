@@ -8,7 +8,7 @@ import random
 import hitherdither
 from PIL import Image
 from inky import auto
-
+from get_inky import get_inky
 
 def _get_image(page):
     url = "https://www.svt.se/text-tv/" + str(page)
@@ -30,12 +30,10 @@ def _set_page(page):
 
     if (page < 100) or( page > 999):
         page = 100
-    inky = auto(ask_user=True, verbose=True)
-    thresholds = [64, 64, 64]  # Threshold for snapping colours, I guess?
-    palette = hitherdither.palette.Palette(inky._palette_blend(0.8, dtype='uint24'))
+    inky = get_inky()
     image = Image.open(_get_image(page)).convert("RGB")
     image_resized = image.resize(inky.resolution)
-    return hitherdither.ordered.bayer.bayer_dithering(image_resized, palette, thresholds, order=8)
+    return image_resized
 
 
 def _get_possible_pages():

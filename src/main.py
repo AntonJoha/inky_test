@@ -10,6 +10,8 @@ while True:
         set_screen(image_yo)
         if on_pi():
             time.sleep(60*2)
+        else:
+            time.sleep(1)
     except:
         print("Error")
         time.sleep(1)

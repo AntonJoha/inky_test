@@ -1,5 +1,11 @@
-command=neofetch
+command=cal -y
 x=0
 y=0
 width=600
 height=400
+[new]
+command=bash cowfortune
+x=0
+y=450
+width=600
+height=100

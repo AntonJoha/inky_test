@@ -5,14 +5,16 @@ from raspcheck import on_pi
 
 inky = None
 
+
 def new_inky():
-    global inky 
-    if on_pi(): 
+    global inky
+    if on_pi():
         inky = Inky7Colour()
     else:
         inky = InkyMockImpression()
 
+
 def get_inky():
-    if inky == None:
+    if inky is None:
         new_inky()
     return inky

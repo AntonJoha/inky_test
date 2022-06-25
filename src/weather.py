@@ -1,5 +1,6 @@
 import os
 from PIL import Image
+import PIL.ImageOps
 from inky import auto
 from get_inky import get_inky
 
@@ -8,7 +9,6 @@ from get_inky import get_inky
 def _take_screenshot():
     os.system("chromium \
     --headless \
-    --disable-gpu \
     -window-size=1000,1500 \
     --screenshot  \
     https://www.smhi.se/vader/prognoser/ortsprognoser/q/Kristinehamn/2699282 \
@@ -16,17 +16,19 @@ def _take_screenshot():
 
 
 def _open_image():
-    return Image.open("screenshot.png")
+    return Image.open("screenshot.png").convert("RGB")
 
 def _get_crop_dimensions():
-    return (60, 611, 806, 1161)
+    return (60, 611, 704, 1161)
+
+def _invert_image(img):
+    return PIL.ImageOps.invert(img)
 
 def _get_image():
     _take_screenshot()
-    image = _open_image()
+    image = _invert_image(_open_image())
     copy = image.crop(_get_crop_dimensions())
-    image.close()
-    os.system("rm screenshot.png")
+    #os.system("rm screenshot.png")
     return copy
 
 def get_weather_image():

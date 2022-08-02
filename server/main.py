@@ -5,7 +5,7 @@ from flask import request
 import threading
 import time
 
-import inky_wrapper
+import try_inky
 
 app = Flask(__name__)
 order = queue.Queue()
@@ -14,7 +14,8 @@ order = queue.Queue()
 def handle_queue():
     while True:
         item = order.get(block=True, timeout=None)
-    
+        try_inky.set_screen(item)
+        time.sleep(60)
 
 def add_image(data):
     order.put(data, block=True, timeout=None)

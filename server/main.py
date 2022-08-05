@@ -5,20 +5,26 @@ from flask import request
 import threading
 import time
 
+from raspcheck import on_pi
 import try_inky
 
 app = Flask(__name__)
 order = queue.Queue()
-
+keep_going = True
 
 def handle_queue():
-    while True:
-        item = order.get(block=True, timeout=None)
-        try_inky.set_screen(item)
-        time.sleep(60)
+    while keep_going:
+        try:
+            item = order.get(block=True, timeout=60)
+            try_inky.set_screen(item)
+            if on_pi():
+                time.sleep(60)
+        except queue.Empty:
+            print("Empty")
 
 def add_image(data):
     order.put(data, block=True, timeout=None)
+    print("Order added")
 
 @app.get("/")
 def handle_info():
@@ -36,14 +42,16 @@ def handle_start():
     """
     data = request.get_json()
     add_image(data)
-    
-
+    print("found")
     return "ok"
-
-
 
 if __name__ == "__main__":
 
-    print("Starting Battlesnake Server...")
+    print("Starting server...")
+    th = threading.Thread(target=handle_queue)
+    th.start()
+
     port = int(os.environ.get("PORT", "8080"))
     app.run(host="0.0.0.0", port=port, debug=True)
+    keep_going = False
+    th.join()

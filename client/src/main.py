@@ -6,15 +6,11 @@ from raspcheck import on_pi
 from weather import get_weather_image
 
 def _set_image(fun):
-    try:
-        set_screen(fun)
-        if on_pi():
-            time.sleep(60*2)
-        else:
-            time.sleep(1)
-    except:
-        print("Error")
-        time.sleep(1)
+    set_screen(fun)
+    if on_pi():
+        time.sleep(60*2)
+    else:
+        time.sleep(10)
 
 
 while True:

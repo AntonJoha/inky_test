@@ -23,8 +23,10 @@ def handle_queue():
             print("Empty")
 
 def add_image(data):
+    if order.qsize() > 15:
+        return "List is full"
     order.put(data, block=True, timeout=None)
-    print("Order added")
+    return "Order added"
 
 @app.get("/")
 def handle_info():
@@ -41,9 +43,8 @@ def handle_start():
     request.json contains information about the game that's about to be played.
     """
     data = request.get_json()
-    add_image(data)
-    print("found")
-    return "ok"
+    return add_image(data)
+
 
 if __name__ == "__main__":
 

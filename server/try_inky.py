@@ -22,7 +22,8 @@ def set_screen(data):
     
     inky = get_inky()
     image = _image_from_data(data)
-    
+    image = image.resize(inky.resolution)
+
     if on_pi():
         image = _dither_image(image)
     
